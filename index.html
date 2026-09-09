@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KAFE12 PRONOS - Pronostics Sportifs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        /* --- RESET & BASE --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #060912;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 100%;
+            background: #0c1025;
+            border-radius: 28px;
+            padding: 28px 22px 32px;
+            color: #e8edf5;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 215, 0, 0.04) inset;
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(ellipse at 50% 20%, rgba(200, 170, 60, 0.02), transparent 60%);
+            pointer-events: none;
+        }
+
+        /* --- EN-TÊTE --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #6a74a8;
+            margin-bottom: 20px;
+            letter-spacing: 0.2px;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 1;
+        }
+        .header .badge {
+            background: rgba(200, 180, 100, 0.06);
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 9px;
+            color: #b8a86a;
+            border: 1px solid rgba(200, 180, 100, 0.08);
+            letter-spacing: 0.8px;
+        }
+
+        /* --- TITRE --- */
+        .main-title {
+            text-align: center;
+            margin: 0 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .main-title h1 {
+            font-size: 32px;
+            font-weight: 900;
+            color: #e8edf5;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+        .main-title h1 span {
+            background: linear-gradient(135deg, #d4c070, #b89a40);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .main-title .sub {
+            font-size: 11px;
+            color: #6a74a8;
+            letter-spacing: 1.2px;
+            margin-top: 4px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        /* --- BANNIÈRE VIDÉO --- */
+        .video-banner {
+            position: relative;
+            width: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            z-index: 1;
+        }
+        .video-banner video {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            background: #080b17;
+        }
+        .video-banner .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 16px 14px;
+            background: linear-gradient(to top, rgba(6, 9, 18, 0.95) 0%, rgba(6, 9, 18, 0.2) 60%, transparent 100%);
+            pointer-events: none;
+        }
+        .video-banner .overlay a,
+        .video-banner .overlay .promo-code {
+            pointer-events: auto;
+        }
+        .video-banner .overlay .brands {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3px 8px;
+            margin-bottom: 4px;
+        }
+        .video-banner .overlay .brands a {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2px 10px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 10px;
+            font-weight: 600;
+            color: #c8d0e8;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+        .video-banner .overlay .brands a:hover {
+            background: rgba(200, 180, 100, 0.08);
+            border-color: rgba(200, 180, 100, 0.15);
+            color: #e8edf5;
+        }
+        .video-banner .overlay .promo-code {
+            font-size: 18px;
+            font-weight: 800;
+            color: #d4c070;
+            text-align: center;
+            letter-spacing: 3px;
+            pointer-events: auto;
+            display: block;
+        }
+        .video-banner .overlay .promo-code small {
+            font-weight: 400;
+            font-size: 10px;
+            color: #6a74a8;
+            letter-spacing: 1px;
+        }
+
+        /* --- BOOKMAKERS (liste complète) --- */
+        .bookmaker-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 4px 0 14px;
+            z-index: 1;
+            position: relative;
+        }
+        .bookmaker-card {
+            background: rgba(18, 22, 45, 0.5);
+            border-radius: 14px;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid #b89a40;
+            transition: all 0.2s ease;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+        }
+        .bookmaker-card:hover {
+            background: rgba(18, 22, 45, 0.8);
+            border-left-color: #d4c070;
+        }
+        .bookmaker-card .name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #e8edf5;
+            letter-spacing: 0.2px;
+        }
+        .bookmaker-card .promo {
+            background: rgba(200, 180, 100, 0.08);
+            color: #d4c070;
+            font-weight: 600;
+            font-size: 9px;
+            padding: 2px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            border: 1px solid rgba(200, 180, 100, 0.06);
+        }
+
+        /* --- BLOC PROMO --- */
+        .promo-block {
+            background: rgba(200, 180, 100, 0.02);
+            border-radius: 14px;
+            padding: 14px;
+            text-align: center;
+            margin: 4px 0 16px;
+            border: 1px solid rgba(200, 180, 100, 0.04);
+            z-index: 1;
+            position: relative;
+        }
+        .promo-block .big-promo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #d4c070;
+            letter-spacing: 3px;
+        }
+
+        /* --- BOUTON WHATSAPP --- */
+        .whatsapp-btn {
+            display: block;
+            background: #1a8f4a;
+            color: #fff;
+            font-weight: 700;
+            font-size: 15px;
+            text-align: center;
+            padding: 14px;
+            border-radius: 40px;
+            text-decoration: none;
+            margin: 10px 0 22px;
+            letter-spacing: 0.6px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 0 #0f6a37, 0 8px 24px rgba(26, 143, 74, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            z-index: 1;
+            position: relative;
+        }
+        .whatsapp-btn:hover {
+            background: #1e9f52;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 0 #0f6a37, 0 12px 32px rgba(26, 143, 74, 0.12);
+        }
+        .whatsapp-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0f6a37;
+        }
+
+        /* --- CARROUSEL --- */
+        .results-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #e8edf5;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-wrapper {
+            width: 100%;
+            overflow: hidden;
+            border-radius: 18px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-track {
+            display: flex;
+            gap: 14px;
+            width: max-content;
+            animation: defilementGaucheDroite 35s linear infinite;
+            padding: 4px 0;
+        }
+
+        .scroll-wrapper:hover .scroll-track {
+            animation-play-state: paused;
+        }
+
+        @keyframes defilementGaucheDroite {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        /* --- CARTE IMAGE --- */
+        .screenshot-card {
+            flex-shrink: 0;
+            width: 180px;
+            background: #080b17;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            padding: 8px 8px 12px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+        }
+        .screenshot-card::after {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(200, 180, 100, 0.06), transparent 50%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .screenshot-card:hover::after {
+            opacity: 1;
+        }
+        .screenshot-card:hover {
+            transform: scale(1.03) translateY(-4px);
+            border-color: rgba(200, 180, 100, 0.08);
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6), 0 0 40px rgba(200, 180, 100, 0.01);
+        }
+
+        .screenshot-card .image-container {
+            width: 100%;
+            aspect-ratio: 9 / 16;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #12162b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .screenshot-card .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .screenshot-card .image-container .fallback-text {
+            position: absolute;
+            color: #6a74a8;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- INFOS MODERNISÉES --- */
+        .screenshot-card .caption {
+            width: 100%;
+            margin-top: 8px;
+            text-align: center;
+            padding: 0 2px;
+        }
+
+        .screenshot-card .caption .date {
+            display: inline-block;
+            color: #6a74a8;
+            font-weight: 500;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 0 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+            padding-bottom: 2px;
+            margin-bottom: 2px;
+        }
+
+        .screenshot-card .caption .divider {
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(200, 180, 100, 0.12), transparent);
+            margin: 2px auto;
+        }
+
+        .screenshot-card .caption .cote {
+            display: inline-block;
+            background: rgba(200, 180, 100, 0.04);
+            color: #d4c070;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 1px 12px;
+            border-radius: 30px;
+            border: 1px solid rgba(200, 180, 100, 0.04);
+            letter-spacing: 0.3px;
+        }
+
+        .screenshot-card .caption .gain {
+            display: block;
+            color: #5dbd8a;
+            font-weight: 800;
+            font-size: 14px;
+            margin-top: 2px;
+            letter-spacing: 0.2px;
+        }
+
+        .screenshot-card .caption .gain .badge-paye {
+            display: inline-block;
+            background: rgba(93, 189, 138, 0.04);
+            border: 1px solid rgba(93, 189, 138, 0.06);
+            font-size: 7px;
+            font-weight: 600;
+            padding: 1px 8px;
+            border-radius: 30px;
+            color: #5dbd8a;
+            margin-left: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            vertical-align: middle;
+            position: relative;
+            top: -1px;
+        }
+
+        .screenshot-card .hint {
+            display: block;
+            font-size: 7px;
+            color: #3a4270;
+            margin-top: 4px;
+            letter-spacing: 0.6px;
+            font-weight: 400;
+            transition: color 0.2s ease;
+            text-transform: uppercase;
+        }
+        .screenshot-card:hover .hint {
+            color: #5a6a90;
+        }
+
+        .footer-note {
+            text-align: center;
+            color: #3a4270;
+            font-size: 10px;
+            margin-top: 20px;
+            letter-spacing: 0.8px;
+            font-weight: 400;
+            border-top: 1px solid rgba(255, 255, 255, 0.01);
+            padding-top: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ========== MODALE ========== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.25s ease;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            max-width: 95%;
+            max-height: 92%;
+            border-radius: 22px;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            background: #060912;
+            padding: 6px;
+            position: relative;
+        }
+
+        .modal-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: 18px;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            width: 40px;
+            height: 40px;
+            background: #1a1f3b;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            font-size: 18px;
+            font-weight: 400;
+            color: #8a94c0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+        }
+        .modal-close:hover {
+            background: #2a3060;
+            color: #e8edf5;
+            transform: rotate(90deg);
+        }
+        .modal-close:active {
+            transform: rotate(90deg) scale(0.92);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ===== EN-TÊTE ===== -->
+        <div class="header">
+            <span>kafe12-pronos.onrender.com</span>
+            <span class="badge">TikTok</span>
+        </div>
+
+        <!-- ===== TITRE ===== -->
+        <div class="main-title">
+            <h1>KAFE12 <span>PRONOS</span></h1>
+            <div class="sub">Pronostics sportifs · Analyses · Résultats</div>
+        </div>
+
+        <!-- ===== BANNIÈRE VIDÉO ===== -->
+        <div class="video-banner">
+            <video autoplay muted loop playsinline>
+                <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la vidéo.
+            </video>
+            <div class="overlay">
+                <div class="brands">
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">1xBet</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">MelBet</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">PariPesa</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">WinWinbet</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">LineBet</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">Betwinner</a>
+                    <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener">888starz</a>
+                </div>
+                <span class="promo-code"><small>CODE PROMO</small> KAFE12</span>
+            </div>
+        </div>
+
+        <!-- ===== BOOKMAKERS (liste complète) ===== -->
+        <div class="bookmaker-grid">
+            <div class="bookmaker-card">
+                <span class="name">1xBet</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">MelBet</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">PariPesa</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">WinWinbet</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">LineBet</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">Betwinner</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+            <div class="bookmaker-card">
+                <span class="name">888starz</span>
+                <span class="promo">Code KAFE12</span>
+            </div>
+        </div>
+
+        <!-- ===== BLOC PROMO ===== -->
+        <div class="promo-block">
+            <span class="big-promo">CODE PROMO KAFE12</span>
+        </div>
+
+        <!-- ===== BOUTON WHATSAPP ===== -->
+        <a href="https://whatsapp.com/channel/0029Vb7OHR48KMqu3vjyji3n" target="_blank" rel="noopener" class="whatsapp-btn">
+            REJOINDRE LA CHAÎNE WHATSAPP
+        </a>
+
+        <!-- ===== CARROUSEL ANCIENS RÉSULTATS ===== -->
+        <div class="results-title">ANCIENS RÉSULTATS</div>
+
+        <div class="scroll-wrapper">
+            <div class="scroll-track">
+
+                <!-- ===== cap1 ===== -->
+                <div class="screenshot-card" data-image="cap1.jpeg">
+                    <div class="image-container">
+                        <img src="cap1.jpeg" alt="Résultat 1" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 1</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">09/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 221.624</span>
+                        <span class="gain">2 460 780,01 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== cap2 ===== -->
+                <div class="screenshot-card" data-image="cap2.jpeg">
+                    <div class="image-container">
+                        <img src="cap2.jpeg" alt="Résultat 2" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 2</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">08/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 246.078</span>
+                        <span class="gain">2 460 780,01 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== cap3 ===== -->
+                <div class="screenshot-card" data-image="cap3.jpeg">
+                    <div class="image-container">
+                        <img src="cap3.jpeg" alt="Résultat 3" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 3</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">07/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 309.013</span>
+                        <span class="gain">2 472 105,76 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== cap4 ===== -->
+                <div class="screenshot-card" data-image="cap4.jpeg">
+                    <div class="image-container">
+                        <img src="cap4.jpeg" alt="Résultat 4" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 4</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">06/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 307.275</span>
+                        <span class="gain">2 028 015,21 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== cap5 ===== -->
+                <div class="screenshot-card" data-image="cap5.jpeg">
+                    <div class="image-container">
+                        <img src="cap5.jpeg" alt="Résultat 5" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 5</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">06/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 452.725</span>
+                        <span class="gain">2 716 352,51 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== cap6 ===== -->
+                <div class="screenshot-card" data-image="cap6.jpeg">
+                    <div class="image-container">
+                        <img src="cap6.jpeg" alt="Résultat 6" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 6</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">05/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 355.081</span>
+                        <span class="gain">2 130 486,81 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <!-- ===== DUPLICATION (infini) ===== -->
+                <div class="screenshot-card" data-image="cap1.jpeg">
+                    <div class="image-container">
+                        <img src="cap1.jpeg" alt="Résultat 1" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 1</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">09/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 221.624</span>
+                        <span class="gain">2 460 780,01 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <div class="screenshot-card" data-image="cap2.jpeg">
+                    <div class="image-container">
+                        <img src="cap2.jpeg" alt="Résultat 2" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 2</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">08/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 246.078</span>
+                        <span class="gain">2 460 780,01 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <div class="screenshot-card" data-image="cap3.jpeg">
+                    <div class="image-container">
+                        <img src="cap3.jpeg" alt="Résultat 3" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 3</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">07/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 309.013</span>
+                        <span class="gain">2 472 105,76 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <div class="screenshot-card" data-image="cap4.jpeg">
+                    <div class="image-container">
+                        <img src="cap4.jpeg" alt="Résultat 4" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 4</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">06/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 307.275</span>
+                        <span class="gain">2 028 015,21 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <div class="screenshot-card" data-image="cap5.jpeg">
+                    <div class="image-container">
+                        <img src="cap5.jpeg" alt="Résultat 5" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 5</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">06/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 452.725</span>
+                        <span class="gain">2 716 352,51 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+                <div class="screenshot-card" data-image="cap6.jpeg">
+                    <div class="image-container">
+                        <img src="cap6.jpeg" alt="Résultat 6" onerror="this.style.display='none'; this.parentElement.querySelector('.fallback-text').style.display='block';">
+                        <span class="fallback-text" style="display:none;">CAP 6</span>
+                    </div>
+                    <div class="caption">
+                        <span class="date">05/09/2026</span>
+                        <span class="divider"></span>
+                        <span class="cote">Cote 355.081</span>
+                        <span class="gain">2 130 486,81 F <span class="badge-paye">Payé</span></span>
+                    </div>
+                    <span class="hint">Cliquez pour agrandir</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="footer-note">Pronostics disponibles — Rejoignez-nous</div>
+    </div>
+
+    <!-- ========== MODALE ========== -->
+    <div class="modal" id="imageModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">✕</button>
+            <img id="modalImage" src="" alt="Agrandissement" />
+        </div>
+    </div>
+
+    <!-- ===== SCRIPT MODALE ===== -->
+    <script>
+        const cards = document.querySelectorAll('.screenshot-card');
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeBtn = document.getElementById('modalClose');
+
+        cards.forEach(card => {
+            card.addEventListener('click', function() {
+                const img = this.querySelector('.image-container img');
+                let src = img.src;
+                const imageName = this.getAttribute('data-image') || 'cap1.jpeg';
+                if (!src || img.style.display === 'none') {
+                    src = imageName;
+                }
+                modalImg.src = src;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
